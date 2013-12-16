@@ -52,7 +52,7 @@ attach(systolique)
 # 1. Etude descriptive des données
 # on va utiliser le modèle linéaire gaussien simple
 cor(Age, Tension)
-model <- lm(Tension~Age)
+model <- lm(Tension ~ Age)
 anova(model)
 plot(systolique, main="Age en fonction de la tension")
 abline(model$coef, col=2, lwd=2)
@@ -61,8 +61,35 @@ abline(0,0,col=2,lwd=2)
 
 # 2. Calcul de prévision
 # Méthode des pourcentiles simples (!!! SUR L'AGE ET LA TENSION !!!)
+Age_prev = 90 # Age pour lequel on veut la prévision
+n = length(Age)
+B = 1000
+rbs = NULL
+Ybs = NULL
+a0 = model$coef[1] # Paramètres du modèle
+a1 = model$coef[2]
+a0_bs = NULL
+a0_biais = NULL # Vecteur des biais bootstrap
+a1_bs = NULL
+a1_biais = NULL
+Y0 = NULL # Vecteur des prévision bootstrap
+for(b in 1:B){
+	ind = sample(1:n, n, replace=TRUE)
+	rbs = model$resid[ind]
+	Ybs = a0 + a1 *Age + rbs
+	model_bs <- lm(Ybs ~ Age)
+	a0_biais[b] = model_bs$coef[1] - a0
+	a1_biais[b] = model_bs$coef[2] - a1
+	a0_bs[b] = a0 - a0_biais[b]
+	a1_bs[b] = a1 - a1_biais[b]
+	Y0[b] = a0_bs[b] + a1_bs[b] * Age_prev
+}
+borne_inf = sort(Y0)[25]
+borne_sup = sort(Y0)[975]
+cat('Intervalle de prévision pour ', Age_prev, 'ans : [ ', borne_inf, ' : ', borne_sup, ' ]\n')
 
-
+# Méthodes de student
+# Utiliser quantile(rnorm(100000,0,1),c(0.025,0.975))
 
 
 ### Partie 3 ###
