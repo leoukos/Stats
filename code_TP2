@@ -142,9 +142,6 @@ for(b in 1:B){
 	rbs = model$resid[ind]
 	Ybs = a0 + a1 * T12 + a2 * Ne12 + a3 * Vx + rbs
 	model_bs <- lm(Ybs ~ T12 + Ne12 + Vx)
-	a0_bs[b] = model_bs$coef[1]
-	a0_bs[b] = model_bs$coef[1]
-	a0_bs[b] = model_bs$coef[1]
 	#a0_biais[b] = model_bs$coef[1] - a0
 	#a1_biais[b] = model_bs$coef[2] - a1
 	#a2_biais[b] = model_bs$coef[3] - a2
