@@ -64,7 +64,13 @@ abline(0,0,col=2,lwd=2)
 # 2. Calcul de prévision
 # Méthode des pourcentiles simples (!!! SUR L'AGE ET LA TENSION !!!)
 Age_prev = 90 # Age pour lequel on veut la prévision
+
+# Paramètres du modèle
 n = length(Age)
+a0 = model$coef[1]
+a1 = model$coef[2]
+
+# Paramètres bootstrap
 B = 1000
 rbs = NULL
 Ybs = NULL
@@ -73,6 +79,7 @@ a0_biais = NULL # Vecteur des biais bootstrap
 a1_bs = NULL
 a1_biais = NULL
 Y0 = NULL # Vecteur des prévision bootstrap
+
 for(b in 1:B){
 	ind = sample(1:n, n, replace=TRUE)
 	rbs = model$resid[ind]
@@ -84,9 +91,11 @@ for(b in 1:B){
 	a1_bs[b] = a1 - a1_biais[b]
 	Y0[b] = a0_bs[b] + a1_bs[b] * Age_prev
 }
+
+# Intervalle
 borne_inf = sort(Y0)[25]
 borne_sup = sort(Y0)[975]
-cat('Intervalle de prévision pour ', Age_prev, 'ans : [ ', borne_inf, ' : ', borne_sup, ' ]\n')
+cat('Intervalle de prévision à 95% pour ', Age_prev, 'ans : [ ', borne_inf, ' : ', borne_sup, ' ]\n')
 
 # Méthodes de student
 # Utiliser quantile(rnorm(100000,0,1),c(0.025,0.975))
@@ -103,6 +112,60 @@ attach(ozone)
 model<-lm(maxO3 ~ T12 + Ne12 +Vx)
 
 # 1. Méthode des pourcentiles simples
+cat('Méthode des pourcentiles simples')
+# Paramètres du modèle
 n = length(max03)
+a0 = model$coef[1]
+a1 = model$coef[2]
+a2 = model$coef[3]
+a3 = model$coef[4]
+
+# Paramètres bootstrap
 B = 1000
+rbs = NULL
+Ybs = NULL
+a0_bs = NULL
+a0_biais = NULL
+sd0_bs = NULL
+a1_bs = NULL
+a1_biais = NULL
+sd1_bs = NULL
+a2_bs = NULL
+a2_biais = NULL
+sd2_bs = NULL
+a3_bs = NULL
+a3_biais = NULL
+sd3_bs= NULL
+
+for(b in 1:B){
+	ind = sample(1:n, n, replace=TRUE)
+	rbs = model$resid[ind]
+	Ybs = a0 + a1 * T12 + a2 * Ne12 + a3 * Vx + rbs
+	model_bs <- lm(Ybs ~ T12 + Ne12 + Vx)
+	a0_bs[b] = model_bs$coef[1]
+	a0_bs[b] = model_bs$coef[1]
+	a0_bs[b] = model_bs$coef[1]
+	#a0_biais[b] = model_bs$coef[1] - a0
+	#a1_biais[b] = model_bs$coef[2] - a1
+	#a2_biais[b] = model_bs$coef[3] - a2
+	#a3_biais[b] = model_bs$coef[4] - a3
+	#a0_bs[b] = a0 - a0_biais[b]
+	#a1_bs[b] = a1 - a1_biais[b]
+	#a2_bs[b] = a2 - a3_biais[b]
+	#a3_bs[b] = a3 - a3_biais[b]
+	#sd0_bs[b] = sd(a0_bs[b])
+	#sd1_bs[b] = sd(a1_bs[b])
+	#sd2_bs[b] = sd(a2_bs[b])
+	#sd3_bs[b] = sd(a3_bs[b])
+}
+
+cat('Intervalle de prévision à 95% pour :
+	a0 : [ ', sort(a0_bs)[25], ' : ', sort(a0_bs)[975], ' ]
+	a1 : [ ', sort(a1_bs)[25], ' : ', sort(a1_bs)[975], ' ]
+	a2 : [ ', sort(a2_bs)[25], ' : ', sort(a2_bs)[975], ' ]
+	a3 : [ ', sort(a3_bs)[25], ' : ', sort(a3_bs)[975], ' ]\n')
+
+# 1. Méthode de l'erreur standard
+cat('Méthode de l'erreur standard')
+
 
