@@ -7,7 +7,7 @@ sample(1:20, 20)
 # Tirage aléatoire de 20 valeurs entre 0 et 20 avec remise
 sample(1:20, 20)
 
-### Partie 1 ###
+### Partie 1 - Acier ###
 # R : résistance de l'acier à la traction
 # C : teneur carbonnée
 # Téléchargement des données et résumé
@@ -34,6 +34,22 @@ hist(est, breaks=6, xlab="Estimation coefficient de corrélation linéaire par b
 boxplot(est)
 
 
-### Partie 2 ###
+### Partie 2 - Tension systolique ###
+# T : tension systolique
+# A : âge
+systolique = read.table("http://lmi.insa-rouen.fr/~portier/Data/systolique.txt",header=TRUE)
+summary(systolique)
+attach(systolique)
+
+# 1. Etude descriptive des données
+cor(Age, Tension)
+model <- lm(Tension, Age)
+anova(model)
+plot(systolique, main="Age en fonction de la tension")
+abline(model$coef, col=2, lwd=2)
+plot(model$resid, main="Résidus", xlab="Age", ylab="Tension")
+abline(0,0,col=2,lwd=2)
+
+
 
 ### Partie 3 ###
