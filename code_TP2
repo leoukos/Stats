@@ -8,6 +8,7 @@ sample(1:20, 20)
 sample(1:20, 20)
 
 ### Partie 1 - Acier ###
+# On cherche à étudier la résistance à la traction en fonction de la teneur carbonée
 # R : résistance de l'acier à la traction
 # C : teneur carbonnée
 # Téléchargement des données et résumé
@@ -43,6 +44,7 @@ sd(est)
 
 
 ### Partie 2 - Tension systolique ###
+# On cherche à expliquer la tension systolique par l'age
 # T : tension systolique
 # A : âge
 systolique = read.table("http://lmi.insa-rouen.fr/~portier/Data/systolique.txt",header=TRUE)
@@ -66,8 +68,6 @@ n = length(Age)
 B = 1000
 rbs = NULL
 Ybs = NULL
-a0 = model$coef[1] # Paramètres du modèle
-a1 = model$coef[2]
 a0_bs = NULL
 a0_biais = NULL # Vecteur des biais bootstrap
 a1_bs = NULL
@@ -92,4 +92,17 @@ cat('Intervalle de prévision pour ', Age_prev, 'ans : [ ', borne_inf, ' : ', bo
 # Utiliser quantile(rnorm(100000,0,1),c(0.025,0.975))
 
 
-### Partie 3 ###
+### Partie 3 - Ozone ###
+# On cherche à expliquer la concentration en ozone
+# T12 : température à 12h
+# Ne12 : nébulosité à 12h
+# Vx : vent à 12 sur l'axe Est-Ouest
+ozone <- read.table('http://lmi.insa-rouen.fr/~portier/Data/ozone.txt', header=TRUE)
+summary(ozone)
+attach(ozone)
+model<-lm(maxO3 ~ T12 + Ne12 +Vx)
+
+# 1. Méthode des pourcentiles simples
+n = length(max03)
+B = 1000
+
