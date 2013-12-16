@@ -27,9 +27,13 @@ est = NULL
 for(b in 1:B){
 	ind = sample(1:n, n, replace=TRUE)
 	biais[b] = cor(C[ind], R[ind]) - cor(C, R)
-	stde[b] = sd(cor(C[ind], R[ind]))
+	stde[b] = cor(C[ind], R[ind])
 	est[b] = cor(C, R) - biais[b]
 }
+mean(est)-cor(C, R)
+sd(est)
+# A faire pour plusieurs valeurs de B
+
 hist(est, breaks=6, xlab="Estimation coefficient de corrélation linéaire par bootstrap", ylab="Fréquence" ,main="Histogramme en fréquence")
 boxplot(est)
 
@@ -42,13 +46,17 @@ summary(systolique)
 attach(systolique)
 
 # 1. Etude descriptive des données
+# on va utiliser le modèle linéaire gaussien simple
 cor(Age, Tension)
-model <- lm(Tension, Age)
+model <- lm(Tension~Age)
 anova(model)
 plot(systolique, main="Age en fonction de la tension")
 abline(model$coef, col=2, lwd=2)
 plot(model$resid, main="Résidus", xlab="Age", ylab="Tension")
 abline(0,0,col=2,lwd=2)
+
+# 2. Calcul de prévision
+# Méthode des pourcentiles simples
 
 
 
