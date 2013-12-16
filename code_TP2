@@ -20,6 +20,7 @@ cor(C, R)
 
 # 2. Biais de l'erreur standard
 n = length(R)
+# 2000 
 B = 1000
 biais = NULL
 stde = NULL
@@ -30,12 +31,15 @@ for(b in 1:B){
 	stde[b] = cor(C[ind], R[ind])
 	est[b] = cor(C, R) - biais[b]
 }
+# Verifier avec freq probability densité pour ne pas avoir/avoir les effectifs
+hist(est, breaks=6, xlab="Estimation coefficient de corrélation linéaire par bootstrap", ylab="Fréquence" ,main="Histogramme en fréquence")
+boxplot(est)
+# Estimateur boostrapé
 mean(est)-cor(C, R)
+# Erreur standard
 sd(est)
 # A faire pour plusieurs valeurs de B
 
-hist(est, breaks=6, xlab="Estimation coefficient de corrélation linéaire par bootstrap", ylab="Fréquence" ,main="Histogramme en fréquence")
-boxplot(est)
 
 
 ### Partie 2 - Tension systolique ###
@@ -56,7 +60,8 @@ plot(model$resid, main="Résidus", xlab="Age", ylab="Tension")
 abline(0,0,col=2,lwd=2)
 
 # 2. Calcul de prévision
-# Méthode des pourcentiles simples
+# Méthode des pourcentiles simples (!!! SUR L'AGE ET LA TENSION !!!)
+
 
 
 
