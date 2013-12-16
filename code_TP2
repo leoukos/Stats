@@ -1,0 +1,39 @@
+### Régréssion non linéaire ###
+# TP2 : Bootstrap non paramétrique
+
+### Notes ###
+# Tirage aléatoire de 20 valeurs entre 0 et 20
+sample(1:20, 20)
+# Tirage aléatoire de 20 valeurs entre 0 et 20 avec remise
+sample(1:20, 20)
+
+### Partie 1 ###
+# R : résistance de l'acier à la traction
+# C : teneur carbonnée
+# Téléchargement des données et résumé
+carbone = read.table("http://lmi.insa-rouen.fr/~portier/Data/carbone.txt",header=TRUE)
+summary(carbone)
+attach(carbone)
+
+# 1. Coefficient de corrélation linéaire
+cor(C, R)
+
+# 2. Biais de l'erreur standard
+n = length(R)
+B = 1000
+biais = NULL
+stde = NULL
+est = NULL
+for(b in 1:B){
+	ind = sample(1:n, n, replace=TRUE)
+	biais[b] = cor(C[ind], R[ind]) - cor(C, R)
+	stde[b] = sd(cor(C[ind], R[ind]))
+	est[b] = cor(C, R) - biais[b]
+}
+hist(est, breaks=6, xlab="Estimation coefficient de corrélation linéaire par bootstrap", ylab="Fréquence" ,main="Histogramme en fréquence")
+boxplot(est)
+
+
+### Partie 2 ###
+
+### Partie 3 ###
