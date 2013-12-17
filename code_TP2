@@ -99,10 +99,8 @@ borne_inf = sort(Y0_90)[25]
 borne_sup = sort(Y0_90)[975]
 cat('Intervalle de prévision pourcentiles simples à 95% pour ', 90, 'ans : [ ', borne_inf, ' : ', borne_sup, ' ]\n')
 
-# Méthodes de student
-# Utiliser quantile(rnorm(100000,0,1),c(0.025,0.975))
-quantile(rnorm(100000,0,1),c(0.025,0.975))
-quantile(Y0,c(0.025,0.975))
+# Intervalles avec la méthode de Student
+
 
 ### Partie 3 - Ozone ###
 # On cherche à expliquer la concentration en ozone
@@ -143,7 +141,7 @@ for(b in 1:B){
 	a3_bs[b] = model_bs$coef[4]
 }
 
-cat('Intervalle de prévision à 95% pour :
+cat('Intervalle de prévision à 95% avec la méthode des pourcentiles simples :
 	a0 : [ ', sort(a0_bs)[25], ' : ', sort(a0_bs)[975], ' ]
 	a1 : [ ', sort(a1_bs)[25], ' : ', sort(a1_bs)[975], ' ]
 	a2 : [ ', sort(a2_bs)[25], ' : ', sort(a2_bs)[975], ' ]
