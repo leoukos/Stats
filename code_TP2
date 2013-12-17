@@ -152,9 +152,9 @@ cat('Intervalle de prévision à 95% pour :
 # 1. Méthode de l'erreur standard
 cat('Intervalle de prévision à 95% avec la méthode de l erreur standard :
 	a0 : [ ', a0 - 1.96 * sd(a0_bs), ' : ', a0 + 1.96 * sd(a0_bs) , ' ]
-	a0 : [ ', a1 - 1.96 * sd(a1_bs), ' : ', a1 + 1.96 * sd(a1_bs) , ' ]
-	a0 : [ ', a2 - 1.96 * sd(a2_bs), ' : ', a2 + 1.96 * sd(a2_bs) , ' ]
-	a0 : [ ', a3 - 1.96 * sd(a3_bs), ' : ', a3 + 1.96 * sd(a3_bs) , ' ]\n')
+	a1 : [ ', a1 - 1.96 * sd(a1_bs), ' : ', a1 + 1.96 * sd(a1_bs) , ' ]
+	a2 : [ ', a2 - 1.96 * sd(a2_bs), ' : ', a2 + 1.96 * sd(a2_bs) , ' ]
+	a3 : [ ', a3 - 1.96 * sd(a3_bs), ' : ', a3 + 1.96 * sd(a3_bs) , ' ]\n')
 
 
 
