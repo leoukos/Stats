@@ -155,6 +155,6 @@ cat('Intervalle de prévision à 95% avec la méthode de l erreur standard :
 	a1 : [ ', a1 - 1.96 * sd(a1_bs), ' : ', a1 + 1.96 * sd(a1_bs) , ' ]
 	a2 : [ ', a2 - 1.96 * sd(a2_bs), ' : ', a2 + 1.96 * sd(a2_bs) , ' ]
 	a3 : [ ', a3 - 1.96 * sd(a3_bs), ' : ', a3 + 1.96 * sd(a3_bs) , ' ]\n')
-
-
-
+	
+# 2. Méthode de student
+confint(model, level=0.95)
