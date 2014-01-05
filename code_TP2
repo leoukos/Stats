@@ -22,7 +22,7 @@ cor(C, R)
 # 2. Biais de l'erreur standard
 n = length(R)
 # 2000 
-B = 1000
+B = 500
 biais = NULL
 stde = NULL
 est = NULL
@@ -34,8 +34,9 @@ for(b in 1:B){
 }
 # Verifier avec freq probability densité pour ne pas avoir/avoir les effectifs
 hist(est, freq=F, breaks=6, xlab="Estimation coefficient de corrélation linéaire par bootstrap", ylab="Fréquence" ,main="Histogramme en fréquence")
+abline(v=cor(C,R), col=2, lwd=2) # indique la valeur de cor(C, R) sur l'histogramme
 boxplot(est)
-# Estimateur boostrapé
+# Biais estimateur boostrapé
 mean(est)-cor(C, R)
 # Erreur standard
 sd(est)
@@ -115,7 +116,7 @@ model<-lm(maxO3 ~ T12 + Ne12 +Vx)
 # 1. Méthode des pourcentiles simples
 cat('Méthode des pourcentiles simples')
 # Paramètres du modèle
-n = length(max03)
+n = length(maxO3)
 a0 = model$coef[1]
 a1 = model$coef[2]
 a2 = model$coef[3]
