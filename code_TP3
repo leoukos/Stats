@@ -17,9 +17,9 @@ for(N in Val)
   est1 = density(X[1:N], bw=h, kernel=c("rectangular"))
   est2 = density(X[1:N], bw=h, kernel=c("gaussian"))
 
-  plot(x, y, col=2, lwd=2)
-  lines(est1, col=3, lwd=2)
-  lines(est2, col=4, lwd=2)
+  plot(x, y, col="red", lwd=2)
+  lines(est1, col="green", lwd=2)
+  lines(est2, col="blue", lwd=2)
 }
 
 ### Partie 2
@@ -38,5 +38,7 @@ plot(density(vent, bw=h, kernel=c(kernel)))
 shapiro.test(ozon)
 shapiro.test(temp)
 shapiro.test(vent)
+
+### Partie 3
 
 
