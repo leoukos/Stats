@@ -1,1 +1,18 @@
-### Code TP3 ###
+### Estimation de densité et Tests d'ajustement ###
+
+### Partie 1
+X = rnorm(2000, mean=0, sd=1)
+x = seq(-4, 4, by=0.1)
+y = dnorm(x)
+
+# 4 plots
+par(mfrow=c(2,2))
+
+# 50 valeurs
+est1 = density(X, bw=nrd0", kernel=c("rectangular"))
+
+# 100 valeurs
+
+# 500 valeurs
+
+# 2000 valeurs
