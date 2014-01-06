@@ -22,3 +22,21 @@ for(N in Val)
   lines(est2, col=4, lwd=2)
 }
 
+### Partie 2
+# varriables ozon, temp et vent
+pol = read.table("http://lmi.insa-rouen.fr/~portier/Data/donpol.txt", header=TRUE)
+summary(pol)
+attach(pol)
+n = length(ozon)
+h = "nrd0"
+kernel = "gaussian"
+plot(density(ozon, bw=h, kernel=c(kernel)))
+plot(density(temp, bw=h, kernel=c(kernel)))
+plot(density(vent, bw=h, kernel=c(kernel)))
+
+# tests de Shapiro-Wilk
+shapiro.test(ozon)
+shapiro.test(temp)
+shapiro.test(vent)
+
+
