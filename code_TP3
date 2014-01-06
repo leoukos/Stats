@@ -18,6 +18,7 @@ for(N in Val)
   est2 = density(X[1:N], bw=h, kernel=c("gaussian"))
 
   plot(x, y, col="red", lwd=2)
+  rug(x)
   lines(est1, col="green", lwd=2)
   lines(est2, col="blue", lwd=2)
 }
@@ -40,5 +41,24 @@ shapiro.test(temp)
 shapiro.test(vent)
 
 ### Partie 3
-
-
+n = 100
+H0 = 0 
+H1 = 0
+for(N in 1:200)
+{
+  # tirage de vecteurs aléatoires
+  x  rnorm(n, mean = 0, sd = 1)
+  #uni = runif(n, min=-2, max=2) pour [-1;1]
+  #stud5 = rt(n, 5)
+  #stud10 = rt(n, 10) ou 30 ddl
+  
+  # Tests
+  if(shapiro.test(x)[2]>0.05)
+  {
+    H0 = H0 + 1
+  } else {
+    H1 = H1 + 1
+  }
+}
+# La puissance empirique c'est le nombre de bonne décision.
+# Kolmog moins puissant de shapiro sur la normalité
