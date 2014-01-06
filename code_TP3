@@ -8,11 +8,17 @@ y = dnorm(x)
 # 4 plots
 par(mfrow=c(2,2))
 
-# 50 valeurs
-est1 = density(X, bw=nrd0", kernel=c("rectangular"))
+# fenêtre par défaut
+h="nrd0"
+# N = 50 , 100 , 500 , 2000
+Val = c(50, 100, 500, 2000)
+for(N in Val)
+{
+  est1 = density(X[1:N], bw=h, kernel=c("rectangular"))
+  est2 = density(X[1:N], bw=h, kernel=c("gaussian"))
 
-# 100 valeurs
+  plot(x, y, col=2, lwd=2)
+  lines(est1, col=3, lwd=2)
+  lines(est2, col=4, lwd=2)
+}
 
-# 500 valeurs
-
-# 2000 valeurs
