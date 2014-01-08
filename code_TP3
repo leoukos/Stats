@@ -42,12 +42,14 @@ shapiro.test(vent)
 
 ### Partie 3
 n = 100
-H0 = 0 
-H1 = 0
-for(N in 1:200)
+H0_sw = 0 
+H1_sw = 0
+H0_ks = 0 
+H1_ks = 0
+for(N in 1:n)
 {
   # tirage de vecteurs aléatoires
-  x  rnorm(n, mean = 0, sd = 1)
+  x = rnorm(n, mean = 0, sd = 1)
   #uni = runif(n, min=-2, max=2) pour [-1;1]
   #stud5 = rt(n, 5)
   #stud10 = rt(n, 10) ou 30 ddl
@@ -55,10 +57,20 @@ for(N in 1:200)
   # Tests
   if(shapiro.test(x)[2]>0.05)
   {
-    H0 = H0 + 1
+    H0_sw = H0_sw + 1
   } else {
-    H1 = H1 + 1
+    H1_sw = H1_sw + 1
+  }
+  
+  if(ks.test(x, "pnorm")[2]>0.05)
+  {
+    H0_ks = H0_ks + 1
+  } else {
+    H1_ks = H1_ks + 1
   }
 }
+cat('Test de Shapiro-Wilk ( n =', n, ') :\n', H0_sw / n * 100, ' : ', H1_sw / n * 100, '\n')
+cat('Test de Kolmogorov-Smirnov ( n =', n, ') :\n', H0_ks / n * 100, ' : ', H1_ks / n * 100, '\n')
+
 # La puissance empirique c'est le nombre de bonne décision.
 # Kolmog moins puissant de shapiro sur la normalité
