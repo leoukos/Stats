@@ -50,26 +50,37 @@ abline(0, 1, lwd=2, col=2)
 R = residuals(resnls)
 
 
-# Bootstrap
+# Estimation Bootstrap
 n = length(Temperature)
-B = 500
+B = 1000
 rbs = NULL
 Ybs = NULL
 Tmin_bs = NULL
 Tmax_bs = NULL
 Topt_bs = NULL
 Yopt_bs = NULL
-
+ybs = NULL
 for(b in 1:B){
   ind = sample(1:n, n, replace=TRUE)
   rbs = resnls$resid[ind]
   Ybs = F(Temperature, Tmin, Tmax, Topt, Yopt) + rbs
-  nls(y ~ F(t, Tmin, Tmax, Topt, Yopt), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt
-# Récupérer les estimations bootstrap et les mettre dans les vetceurs
+  # Récupérer les estimations bootstrap et les mettre dans les vecteurs
+  ybs[b] = F(Temperature,  Tmin_bs, Tmax_bs, Topt_bs, Yopt_bs)
 }
 # Distributions bootstrap
-hist(Tmin_bs)
-hist(Tmax_bs)
-hist(Topt_bs)
-hist(Yopt_bs)
+par(mfrow=c(2,2))
+hist(Tmin_bs, main="Distribution bootstrap de Tmin")
+hist(Tmax_bs, main="Distribution bootstrap de Tmax")
+hist(Topt_bs, main="Distribution bootstrap de Topt")
+hist(Yopt_bs, main="Distribution bootstrap de Yopt")
+
+# Intervalles de confiance
+cat('Intervalle de confiance pour Tmin : [', sort(Tmin)[25], ';', sort(Tmin)[975], ']\n')
+
+# Intervalles de prévision
+y_inf = sort(ybs[25])
+y_sup = sort(ybs[975])
+# Afficher l'ajustement
+lines(y_inf)
+lines(y_sup)
 
