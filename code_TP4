@@ -1,6 +1,8 @@
 ##### Code TP4
 # Taux de croissance de bactérie à différente température
 
+# Package nls
+library(nls2)
 
 # Fonction
 # Tmin : température en deça de laquelle il n'y a plus de croissance
@@ -19,10 +21,47 @@ data = read.table("http://lmi.insa-rouen.fr/~portier/Data/barber.txt", header=TR
 attach(data)
 summary(data)
 
-for(t in 1:50){
-  y[t]=F(t, 8, 50, 40, 2.3)
-}
+
 plot(data, main="Nuage de points")
 rug(Temperature)
-lines(y, col="red", lwd=2)
+
+# Conditions intiales
+Tmin_ini = 8
+Tmax_ini = 50
+Topt_ini = 40
+Yopt_ini = 2.3
+y = null 
+for(t in 1:50){
+  y[t]=F(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
+}
+lines(y, col="green", lwd=2)
+
+# Estimation des paramètres du modèle
+nlsmod = nls(y ~ F(t, Tmin, Tmax, Topt, Yopt), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt=Yopt_ini), trace=FALSE)
+fmla <- as.formula(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))))
+summary(fmla)
+lines(fmla, col="red", lwd=2)
+
+# Nuage observé/prévu
+plot(TauxCroissance, predict(nlsmod), xlab="Observé", ylab="Prévu", main="Nuage observé-prévu")
+abline(0, 1, lwd=2, col=2)
+
+# rédisus non normalisés
+R = residuals(resnls)
+
+
+# Bootstrap
+n = length(Temperature)
+B = 500
+rbs = NULL
+Ybs = NULL
+Tmin_bs = NULL
+Tmin_bs = NULL
+
+for(b in 1:B){
+  ind = sample(1:n, n, replace=TRUE)
+  rbs = resnls$resid[ind]
+  Ybs = F(Temperature, Tmin, Tmax, Topt, Yopt) + rbs
+}
+
 
