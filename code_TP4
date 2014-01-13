@@ -16,6 +16,13 @@ F = function(t, Tmin, Tmax, Topt, Yopt){
     F = 0
 }
 
+F2 = function(T,Tmin,Tmax,Topt,Yopt){
+Ind = 0*T
+Ind[(T >= Tmin)&(T<=Tmax)] = 1
+F = Yopt*(T-Tmax)*(T-Tmin)^2 / ((Topt-Tmin)*((Topt-Tmin)*
+(T-Topt)-(Topt-Tmax)*(Topt+Tmin-2*T)))*Ind
+}
+
 # Données
 data = read.table("http://lmi.insa-rouen.fr/~portier/Data/barber.txt", header=TRUE)
 attach(data)
@@ -49,6 +56,8 @@ abline(0, 1, lwd=2, col=2)
 # rédisus non normalisés
 R = residuals(resnls)
 
+# Deuxième fonction
+resnls = nls(Y~F2(T,Tmin,Tmax,Topt,Yopt),start=c(Tmin=Tmin_ini ,Tmax=Tmax_ini ,Topt=Topt_ini ,Yopt=Yopt_ini ))
 
 # Estimation Bootstrap
 n = length(Temperature)
