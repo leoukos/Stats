@@ -86,12 +86,14 @@ for(N in 1:200)
   #  H1_sw = H1_sw + 1
   #}
   
-  if(ks.test(x, "punif")[2]>0.05)
-  {
-    H0_ks = H0_ks + 1
-  } else {
-    H1_ks = H1_ks + 1
-  }
+  #if(ks.test(x, "punif")[2]>0.05)
+  #{
+  #  H0_ks = H0_ks + 1
+  #} else {
+  #  H1_ks = H1_ks + 1
+  #}
+  if(ks.test(x, runif(n, min=-2,max=2))$p.value < 0.05)
+  	H1_ks = H1_ks + 1
 }
 #cat('Test de Shapiro-Wilk ( n =', n, ') :\n', H0_sw / 2, ' : ', H1_sw / 2, '\n')
 cat('Test de Kolmogorov-Smirnov ( n =', n, ') :\n', H0_ks / 2, ' : ', H1_ks / 2, '\n')
