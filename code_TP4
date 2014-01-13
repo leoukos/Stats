@@ -56,12 +56,20 @@ B = 500
 rbs = NULL
 Ybs = NULL
 Tmin_bs = NULL
-Tmin_bs = NULL
+Tmax_bs = NULL
+Topt_bs = NULL
+Yopt_bs = NULL
 
 for(b in 1:B){
   ind = sample(1:n, n, replace=TRUE)
   rbs = resnls$resid[ind]
   Ybs = F(Temperature, Tmin, Tmax, Topt, Yopt) + rbs
+  nls(y ~ F(t, Tmin, Tmax, Topt, Yopt), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt
+# Récupérer les estimations bootstrap et les mettre dans les vetceurs
 }
-
+# Distributions bootstrap
+hist(Tmin_bs)
+hist(Tmax_bs)
+hist(Topt_bs)
+hist(Yopt_bs)
 
