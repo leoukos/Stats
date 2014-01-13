@@ -1,1 +1,22 @@
 ##### Code TP4
+# Taux de croissance de bactérie à différente température
+
+
+# Fonction
+# Tmin : température en deça de laquelle il n'y a plus de croissance
+# Tmax : température au delà de laquelle il n'y a plus de croissance
+# Topt : température pour laquelle le taux de croissance Yopt est maximal
+# Yopt : Taux de croissance maximal
+F = function(t, Tmin, Tmax, Topt, Yopt){
+  if( t > Tmin && T < Tmax)
+    F = (Yopt(t-Tmax)(t-Tmin)^2)/ ((Topt-Tmin)((Topt-Tmin)(t-Topt)-(Topt-Tmaw)(Topt+Tmin-2*t)))
+  else
+    F = 0
+}
+
+# Données
+data = read.table("http://lmi.insa-rouen.fr/~portier/Data/barber.txt", header=TRUE)
+attach(data)
+summary(data)
+
+plot(data, main="Nuage de points")
