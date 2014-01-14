@@ -2,6 +2,7 @@
 # Taux de croissance de bactérie à différente température
 
 # Package nls
+library(proto)
 library(nls2)
 
 # Fonction
@@ -28,7 +29,7 @@ data = read.table("http://lmi.insa-rouen.fr/~portier/Data/barber.txt", header=TR
 attach(data)
 summary(data)
 
-
+jpeg("Nuage de points - Paramètres intiaux.jpeg")
 plot(data, main="Nuage de points")
 rug(Temperature)
 
@@ -37,27 +38,48 @@ Tmin_ini = 8
 Tmax_ini = 50
 Topt_ini = 40
 Yopt_ini = 2.3
-y = null 
+y = NULL
 for(t in 1:50){
   y[t]=F(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
 }
 lines(y, col="green", lwd=2)
 
 # Estimation des paramètres du modèle
-nlsmod = nls(y ~ F(Temperature, Tmin, Tmax, Topt, Yopt), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt=Yopt_ini), trace=FALSE)
-fmla <- as.formula(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))))
-summary(fmla)
-lines(fmla, col="red", lwd=2)
+Y=TauxCroissance
+T=Temperature
+nlsmod = nls(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt=Yopt_ini), trace=FALSE)
+
+# What does this do ?
+#fmla <- as.formula(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))))
+#summary(fmla)
+
+# Calcul de l'ajustement
+Tmin = summary(nlsmod)$param[1]
+Tmax = summary(nlsmod)$param[2]
+Topt = summary(nlsmod)$param[3]
+Yopt = summary(nlsmod)$param[4]
+for(t in 1:50){
+  y[t]=F(t, Tmin, Tmax, Topt, Yopt)
+}
+lines(y, col="red", lwd=2)
+dev.off()
 
 # Nuage observé/prévu
+jpeg("Nuage observé-prévu.jpeg")
 plot(TauxCroissance, predict(nlsmod), xlab="Observé", ylab="Prévu", main="Nuage observé-prévu")
-abline(0, 1, lwd=2, col=2)
+abline(0, 1, lwd=2, col="red")
+dev.off()
 
 # rédisus non normalisés
-R = residuals(resnls)
+jpeg("Résidus non normalisés.jpeg")
+R = residuals(nlsmod)
+plot(R)
+abline(0, 0, lwd=2, col="red")
+dev.off()
 
+# A faire
 # Deuxième fonction
-resnls = nls(Y~F2(T,Tmin,Tmax,Topt,Yopt),start=c(Tmin=Tmin_ini ,Tmax=Tmax_ini ,Topt=Topt_ini ,Yopt=Yopt_ini ))
+resnls = nls(Y~F2(T,Tmin,Tmax,Topt,Yopt),start=c(Tmin=Tmin_ini ,Tmax=Tmax_ini ,Topt=Topt_ini ,Yopt=Yopt_ini))
 
 # Estimation Bootstrap
 n = length(Temperature)
