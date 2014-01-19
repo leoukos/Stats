@@ -11,10 +11,10 @@ library(nls2)
 # Topt : température pour laquelle le taux de croissance Yopt est maximal
 # Yopt : taux de croissance maximal
 F = function(t, Tmin, Tmax, Topt, Yopt){
-  if( t > Tmin && t < Tmax)
+#  if( t > Tmin && t < Tmax)
     F = (Yopt*(t-Tmax)*(t-Tmin)^2)/ ((Topt-Tmin)*((Topt-Tmin)*(t-Topt)-(Topt-Tmax)*(Topt+Tmin-2*t)))
-  else
-    F = 0
+#  else
+#    F = 0
 }
 
 F2 = function(T,Tmin,Tmax,Topt,Yopt){
@@ -29,7 +29,7 @@ data = read.table("http://lmi.insa-rouen.fr/~portier/Data/barber.txt", header=TR
 attach(data)
 summary(data)
 
-jpeg("Nuage de points - Paramètres intiaux.jpeg")
+#jpeg("Nuage de points - Paramètres intiaux.jpeg")
 plot(data, main="Nuage de points")
 rug(Temperature)
 
@@ -38,20 +38,46 @@ Tmin_ini = 8
 Tmax_ini = 50
 Topt_ini = 40
 Yopt_ini = 2.3
+
 y = NULL
 for(t in 1:50){
-  y[t]=F(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
+  #y[t]=F(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
+  y[t]=F2(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
 }
 lines(y, col="green", lwd=2)
+
+# Autres conditions initiales
+#Tmin_ini = 5
+#Tmax_ini = 48
+#Topt_ini = 42
+#Yopt_ini = 2.0
+#y = NULL
+#for(t in 1:50){
+#  y[t]=F(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
+#}
+#lines(y, col="blue", lwd=2)
+
+#Tmin_ini = 10
+#Tmax_ini = 48
+#Topt_ini = 40
+#Yopt_ini = 2.5
+#y = NULL
+#for(t in 1:50){
+#  y[t]=F(t, Tmin_ini, Tmax_ini, Topt_ini, Yopt_ini)
+#}
+#lines(y, col="red", lwd=2)
 
 # Estimation des paramètres du modèle
 Y=TauxCroissance
 T=Temperature
-nlsmod = nls(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt=Yopt_ini), trace=FALSE)
+#nlsmod = nls(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt=Yopt_ini), trace=FALSE)
 
 # What does this do ?
 #fmla <- as.formula(Y ~ Yopt * (T - Tmax) * (T - Tmin)^2 / ((Topt - Tmin) * ((Topt - Tmin) * (T - Topt) - (Topt - Tmax) * (Topt + Tmin - 2 * T))))
 #summary(fmla)
+
+# deuxième fonction
+nlsmod = nls(Y~F2(T,Tmin,Tmax,Topt,Yopt),start=c(Tmin=Tmin_ini ,Tmax=Tmax_ini ,Topt=Topt_ini ,Yopt=Yopt_ini))
 
 # Calcul de l'ajustement
 Tmin = summary(nlsmod)$param[1]
@@ -59,60 +85,86 @@ Tmax = summary(nlsmod)$param[2]
 Topt = summary(nlsmod)$param[3]
 Yopt = summary(nlsmod)$param[4]
 for(t in 1:50){
-  y[t]=F(t, Tmin, Tmax, Topt, Yopt)
+  #y[t]=F(t, Tmin, Tmax, Topt, Yopt)
+  y[t]=F2(t, Tmin, Tmax, Topt, Yopt)
 }
 lines(y, col="red", lwd=2)
-dev.off()
+#dev.off()
 
 # Nuage observé/prévu
-jpeg("Nuage observé-prévu.jpeg")
+#jpeg("Nuage observé-prévu.jpeg")
 plot(TauxCroissance, predict(nlsmod), xlab="Observé", ylab="Prévu", main="Nuage observé-prévu")
 abline(0, 1, lwd=2, col="red")
-dev.off()
+#dev.off()
 
 # rédisus non normalisés
-jpeg("Résidus non normalisés.jpeg")
+#jpeg("Résidus non normalisés.jpeg")
 R = residuals(nlsmod)
-plot(R)
+plot(T, R, main="Résidus non normalisés", xlab="Température", ylab="Résidus")
 abline(0, 0, lwd=2, col="red")
-dev.off()
-
-# A faire
-# Deuxième fonction
-resnls = nls(Y~F2(T,Tmin,Tmax,Topt,Yopt),start=c(Tmin=Tmin_ini ,Tmax=Tmax_ini ,Topt=Topt_ini ,Yopt=Yopt_ini))
+#dev.off()
 
 # Estimation Bootstrap
+res = R - mean(R) # on recentre
 n = length(Temperature)
 B = 1000
-rbs = NULL
-Ybs = NULL
 Tmin_bs = NULL
 Tmax_bs = NULL
 Topt_bs = NULL
 Yopt_bs = NULL
-ybs = NULL
+Y_bs = matrix(data = NA, nrow = B, ncol = n)
 for(b in 1:B){
-  ind = sample(1:n, n, replace=TRUE)
-  rbs = resnls$resid[ind]
-  Ybs = F(Temperature, Tmin, Tmax, Topt, Yopt) + rbs
-  nlsmod_bs = nls(Ybs ~ F(Temperature, Tmin, Tmax, Topt, Yopt), start=list(Tmin=Tmin_ini, Tmax=Tmax_ini, Topt=Topt_ini, Yopt=Yopt_ini), trace=FALSE)
-  # Récupérer les estimations bootstrap et les mettre dans les vecteurs
-  ybs[b] = F(Temperature,  Tmin_bs, Tmax_bs, Topt_bs, Yopt_bs)
+  ind=sample(1:n, replace=TRUE)
+  Ybs = predict(nlsmod) + res[ind]
+  #ND = data.frame(T, Ybs)
+  nlsmod_bs = nls(Ybs ~ F2(T,Tmin,Tmax,Topt,Yopt),start=c(Tmin=Tmin_ini ,Tmax=Tmax_ini ,Topt=Topt_ini ,Yopt=Yopt_ini))
+  Tmin_bs[b] = coef(nlsmod_bs)[1]
+  Tmax_bs[b] = coef(nlsmod_bs)[2]
+  Topt_bs[b] = coef(nlsmod_bs)[3]
+  Yopt_bs[b] = coef(nlsmod_bs)[4]
+  Y_bs[b,] = predict(nlsmod)
 }
-# Distributions bootstrap
+# Estimation de l'erreur standard pour les paramètres
+cat('Tmin : ', sd(Tmin_bs), '\n')
+cat('Tmax : ', sd(Tmax_bs), '\n')
+cat('Topt : ', sd(Topt_bs), '\n')
+cat('Yopt : ', sd(Yopt_bs), '\n')
+summary(nlsmod)
+
+# Distribution
+jpeg("Distribution paramètres bootstrap.jpeg")
 par(mfrow=c(2,2))
-hist(Tmin_bs, main="Distribution bootstrap de Tmin")
-hist(Tmax_bs, main="Distribution bootstrap de Tmax")
-hist(Topt_bs, main="Distribution bootstrap de Topt")
-hist(Yopt_bs, main="Distribution bootstrap de Yopt")
+hist(Tmin_bs, main="Distribution bootstrap Tmin", xlab="Tmin", ylab="Frequency",  freq=TRUE)
+abline(v=c(0, mean(Tmin_bs)), col="red", lwd=2)
+
+hist(Tmax_bs, main="Distribution bootstrap Tmax", xlab="Tmax", ylab="Frequency",  freq=TRUE)
+abline(v=c(0, mean(Tmax_bs)), col="red", lwd=2)
+
+hist(Topt_bs, main="Distribution bootstrap Topt", xlab="Topt", ylab="Frequency",  freq=TRUE)
+abline(v=c(0, mean(Topt_bs)), col="red", lwd=2)
+
+hist(Yopt_bs, main="Distribution bootstrap Yopt", xlab="Yopt", ylab="Frequency",  freq=TRUE)
+abline(v=c(0, mean(Yopt_bs)), col="red", lwd=2)
+dev.off()
 
 # Intervalles de confiance
-cat('Intervalle de confiance pour Tmin : [', sort(Tmin)[25], ';', sort(Tmin)[975], ']\n')
+cat('Intervalle de confiance pour Tmin : [', sort(Tmin_bs)[25], ';', sort(Tmin_bs)[975], ']\n')
+cat('Intervalle de confiance pour Tmax : [', sort(Tmax_bs)[25], ';', sort(Tmax_bs)[975], ']\n')
+cat('Intervalle de confiance pour Topt : [', sort(Topt_bs)[25], ';', sort(Topt_bs)[975], ']\n')
+cat('Intervalle de confiance pour Topt : [', sort(Yopt_bs)[25], ';', sort(Yopt_bs)[975], ']\n')
 
-# Intervalles de prévision
-y_inf = sort(ybs[25])
-y_sup = sort(ybs[975])
+# Bandes de confiance
+y_inf = NULL
+y_sup = NULL
+for(b in 1:n){
+y_inf[b] = quantile(Y_bs[,b], probs=0.025)
+y_sup[b] = quantile(Y_bs[,b], probs=0.975)
+}
 # Afficher l'ajustement
-lines(y_inf)
-lines(y_sup)
+jpeg("Bandes de confiances.jpeg")
+plot(data, main="Nuage de points")
+lines(y, col="red", lwd=2)
+lines(T, y_inf, col="blue", lwd=2)
+lines(T,y_sup, col="blue", lwd=2)
+dev.off()
 
