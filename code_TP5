@@ -9,8 +9,11 @@ f = function(x){
 # mse(y, y^)
 
 # Simulation
-sig2 = 0.25
+N = 1000
 n = 1000
+x = matrix(nrow=N, ncol=n)
+y = matrix(nrow=N, ncol=n)
+
 x = rnorm(n, mean=0,sd=1)
 y = data.frame(f(x))[,] + rnorm(n, mean=0, sd=sig2)
 
