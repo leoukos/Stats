@@ -1,0 +1,14 @@
+### Estimation non-paramétrique de la fonction de régression
+
+# fonction
+f = function(x){
+  f = x*x - 1
+}
+
+# erreur quadratique
+# mse(y, y^)
+
+# Simulation
+n = 1000
+x = rnorm(n, mean=0,sd=1)
+y = data.frame(f(x))[,] + rnorm(n, mean=0, sd=0.25)
