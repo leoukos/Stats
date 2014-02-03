@@ -3,10 +3,6 @@ library(nlme)
 library(mgcv)
 
 ### Etude par Simulation
-
-
-
-### Données pollution
 # fonctions
 f1 = function(x){
 	f1 = x^2 - 1
@@ -55,11 +51,18 @@ gam.check(modgam)
 
 
 # Comparaison avec x2 en linéaire
-modgam2 <- gam(y ~ s(x1) + s(x2) + s(x3))
+modgam2 <- gam(y ~ s(x1) + x2 + s(x3))
 summary(modgam)
 AIC(modgam, modgam2)
 
+### Données pollution
+# mettre des poids sur les observatrions
+# etudier le modèle linéaire
+# scores prévus observés
+# Récupération
+data = read.table("http://lmi.insa-rouen.fr/~portier/Data/p13.txt", header=TRUE)
 
-
+# Analyse données
+plot(data)
 
 
