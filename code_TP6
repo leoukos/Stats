@@ -1,0 +1,9 @@
+# Estimation par backfitting dans les modèles additifs non linéaires
+library(nlme)
+library(mgcv)
+
+### Etude par Simulation
+
+
+
+### Données pollution
