@@ -22,6 +22,24 @@ f3 = function(x){
 
 # Simulation
 n = 1000
+sig2 = 0.25
+mu = 0
 x1 = rnorm(n, mean=0, sd=1)
 x2 = rnorm(n, mean=0, sd=1)
 x3 = runif(n, min=0, max=1)
+
+y = mu + f1(x1) + f2(x2) + f3(x3) + rnorm(n, mean=0, sd=sqrt(sig2))
+
+# Estimation
+modgam <- gam(y ~ f1(x1) + f2(x2) + f3(x3))
+summary(modgam)
+gam.check(modgam)
+
+
+
+
+
+
+
+
+
