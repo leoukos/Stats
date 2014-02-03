@@ -31,13 +31,33 @@ x3 = runif(n, min=0, max=1)
 y = mu + f1(x1) + f2(x2) + f3(x3) + rnorm(n, mean=0, sd=sqrt(sig2))
 
 # Estimation
-modgam <- gam(y ~ f1(x1) + f2(x2) + f3(x3))
+modgam <- gam(y ~ s(x1) + s(x2) + s(x3))
 summary(modgam)
+# EDF proche de 1 = linéaire
+# étudier l'influence de passer x2 en linéaire
+
+#par(mfrow=c(1,3))
+#plot(modgam)
+
+#par(mfrow=c(1,3))
+#plot(modgam, scale=0)
+
+#plot(modgam, pages=1)
+
+par(mfrow=c(2, 2))
+plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan")
+plot(modgam,scale=0,select=2,shade=TRUE, shade.col="cyan")
+plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
+
+
+#plot(modgam,pages=1,residuals=TRUE)
 gam.check(modgam)
 
 
-
-
+# Comparaison avec x2 en linéaire
+modgam2 <- gam(y ~ s(x1) + s(x2) + s(x3))
+summary(modgam)
+AIC(modgam, modgam2)
 
 
 
