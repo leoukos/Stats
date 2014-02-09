@@ -147,7 +147,13 @@ source("TabDep.R")
 Perfo(test_ozon, test_mozon, pred_ozon)
 TabDep(test_ozon, pred_ozon, 130, 180, 130)
 
+# Estimateurs partiels
 
+x1 = vent
+x2 = mozon
+x3 = temp
+
+### A jeter
 # Regions etc
 region = matrix(data = NA, ncol=2, nrow=2)
 region[1,1] = quantile(vent, 1/3)

@@ -88,10 +88,14 @@ modgam_b <- gam(y_b ~ s(x1_b) +s(x2_b))
 modgam_mb <- gam(y_mb ~ s(x1_mb) +s(x2_mb))
 modgam_mh <- gam(y_mh ~ s(x1_mh) +s(x2_mh))
 modgam_h <- gam(y_h ~ s(x1_h) +s(x2_h))
-plot(modgam_b,scale=0,select=1,shade=TRUE, shade.col="cyan")
-plot(modgam_mb,scale=0,select=1,shade=TRUE, shade.col="cyan")
-plot(modgam_mh,scale=0,select=1,shade=TRUE, shade.col="cyan")
-plot(modgam_h,scale=0,select=1,shade=TRUE, shade.col="cyan")
+plot(modgam_b,scale=0,select=1,shade=TRUE, shade.col="cyan", lwd=2)
+lines(seq(-3,3, b=0.2), f1(seq(-3,3, b=0.2)), lwd=2, col="red")
+plot(modgam_mb,scale=0,select=1,shade=TRUE, shade.col="cyan", lwd=2)
+lines(seq(-3,3, b=0.2), f1(seq(-3,3, b=0.2)), lwd=2, col="red")
+plot(modgam_mh,scale=0,select=1,shade=TRUE, shade.col="cyan", lwd=2)
+lines(seq(-3,3, b=0.2), f1(seq(-3,3, b=0.2)), lwd=2, col="red")
+plot(modgam_h,scale=0,select=1,shade=TRUE, shade.col="cyan", lwd=2)
+lines(seq(-3,3, b=0.2), f1(seq(-3,3, b=0.2)), lwd=2, col="red")
 
 
 
@@ -155,15 +159,15 @@ for(i in 1:n){
 }
 
 # Estimation partielle
-modgam_1 <- gam(yr[1:ir[1]-1,1] ~ s(x1r[1:ir[1]-1,1]) + s(x2r[1:ir[1]-1,1]) +s(x3r[1:ir[1]-1,1]))
-modgam_2 <- gam(yr[1:ir[2]-1,2] ~ s(x1r[1:ir[2]-1,2]) + s(x2r[1:ir[2]-1,2]) +s(x3r[1:ir[2]-1,2]))
-modgam_3 <- gam(yr[1:ir[3]-1,3] ~ s(x1r[1:ir[3]-1,3]) + s(x2r[1:ir[3]-1,3]) +s(x3r[1:ir[3]-1,3]))
-modgam_4 <- gam(yr[1:ir[4]-1,4] ~ s(x1r[1:ir[4]-1,4]) + s(x2r[1:ir[4]-1,4]) +s(x3r[1:ir[4]-1,4]))
-modgam_5 <- gam(yr[1:ir[5]-1,5] ~ s(x1r[1:ir[5]-1,5]) + s(x2r[1:ir[5]-1,5]) +s(x3r[1:ir[5]-1,5]))
-modgam_6 <- gam(yr[1:ir[6]-1,6] ~ s(x1r[1:ir[6]-1,6]) + s(x2r[1:ir[6]-1,6]) +s(x3r[1:ir[6]-1,6]))
-modgam_7 <- gam(yr[1:ir[7]-1,7] ~ s(x1r[1:ir[7]-1,7]) + s(x2r[1:ir[7]-1,7]) +s(x3r[1:ir[7]-1,7]))
-modgam_8 <- gam(yr[1:ir[8]-1,8] ~ s(x1r[1:ir[8]-1,8]) + s(x2r[1:ir[8]-1,8]) +s(x3r[1:ir[8]-1,8]))
-modgam_9 <- gam(yr[1:ir[9]-1,9] ~ s(x1r[1:ir[9]-1,9]) + s(x2r[1:ir[9]-1,9]) +s(x3r[1:ir[9]-1,9]))
+modgam_1 <- gam(yr[1:ir[1]-1,1] ~ s(x1r[1:ir[1]-1,1]) + s(x2r[1:ir[1]-1,1]) + s(x3r[1:ir[1]-1,1]))
+modgam_2 <- gam(yr[1:ir[2]-1,2] ~ s(x1r[1:ir[2]-1,2]) + s(x2r[1:ir[2]-1,2]) + s(x3r[1:ir[2]-1,2]))
+modgam_3 <- gam(yr[1:ir[3]-1,3] ~ s(x1r[1:ir[3]-1,3]) + s(x2r[1:ir[3]-1,3]) + s(x3r[1:ir[3]-1,3]))
+modgam_4 <- gam(yr[1:ir[4]-1,4] ~ s(x1r[1:ir[4]-1,4]) + s(x2r[1:ir[4]-1,4]) + s(x3r[1:ir[4]-1,4]))
+modgam_5 <- gam(yr[1:ir[5]-1,5] ~ s(x1r[1:ir[5]-1,5]) + s(x2r[1:ir[5]-1,5]) + s(x3r[1:ir[5]-1,5]))
+modgam_6 <- gam(yr[1:ir[6]-1,6] ~ s(x1r[1:ir[6]-1,6]) + s(x2r[1:ir[6]-1,6]) + s(x3r[1:ir[6]-1,6]))
+modgam_7 <- gam(yr[1:ir[7]-1,7] ~ s(x1r[1:ir[7]-1,7]) + s(x2r[1:ir[7]-1,7]) + s(x3r[1:ir[7]-1,7]))
+modgam_8 <- gam(yr[1:ir[8]-1,8] ~ s(x1r[1:ir[8]-1,8]) + s(x2r[1:ir[8]-1,8]) + s(x3r[1:ir[8]-1,8]))
+modgam_9 <- gam(yr[1:ir[9]-1,9] ~ s(x1r[1:ir[9]-1,9]) + s(x2r[1:ir[9]-1,9]) + s(x3r[1:ir[9]-1,9]))
 
 modgam <- gam(y ~ s(x1) + s(x2) + s(x3))
 
