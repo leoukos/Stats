@@ -133,16 +133,22 @@ plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
 gam.check(modgam)
 
 # Prediction
-test_data <- data.frame(est_temp, test_vent, test_mozon)
+test_data <- data.frame(appr_temp=test_temp, appr_vent=test_vent, appr_mozon=test_mozon)
 pred <- predict(modgam, test_data, se.fit = TRUE)
+pred_ozon = pred$fit
+pred_err = pred$se.fit
+
+plot(test_ozon, pred_ozon, main="Nuage observé prévu")
+abline(0,1, col="red", lwd=2)
 
 # Performances
 source("Perfo.R")
 source("TabDep.R")
-Perfo(ozon, mozon, ozonprev)
-TabDep(ozon, mozon, ozonprev, 130, 180, 130)
+Perfo(test_ozon, test_mozon, pred_ozon)
+TabDep(test_ozon, pred_ozon, 130, 180, 130)
 
 
+# Regions etc
 region = matrix(data = NA, ncol=2, nrow=2)
 region[1,1] = quantile(vent, 1/3)
 region[1,2] = quantile(vent, 2/3)
