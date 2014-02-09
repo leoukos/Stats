@@ -37,8 +37,8 @@ summary(modgam)
 
 #par(mfrow=c(1,3))
 #plot(modgam, scale=0)
-
 #plot(modgam, pages=1)
+
 
 par(mfrow=c(2, 2))
 plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan")
@@ -55,14 +55,113 @@ modgam2 <- gam(y ~ s(x1) + x2 + s(x3))
 summary(modgam)
 AIC(modgam, modgam2)
 
+# Estimation partielle
+# on va estimer f3 
+par(mfrow=c(3,3))
+hist(x2)
+plot(x1, x3, main="Nuage x1 - x2")
+
+# Estimateur partiel x1
+region = matrix(data = NA, ncol=2, nrow=2)
+region[1,1] = quantile(x2, 1/3)
+region[1,2] = quantile(x2, 2/3)
+region[2,1] = quantile(x3, 1/3)
+region[2,2] = quantile(x3, 2/3)
+
+plot(x2, x3)
+abline(v=region[1,1])
+abline(v=region[1,2])
+abline(h=region[2,1])
+abline(h=region[2,2])
+
+x2_g = which(x2 <= region[1,1])
+x2_m = which(x2 > region[1,1] & x2 < region[1,2])
+x2_d = which(x2 >= region[1,2])
+
+x3_b = which(x3 <= region[2,1])
+x3_m = which(x3 > region[2,1] & x2 < region[2,2])
+x3_h = which(x3 >= region[2,2])
+
+
+###############################################################
+###############################################################
+
 ### Données pollution
 # mettre des poids sur les observatrions
 # etudier le modèle linéaire
 # scores prévus observés
 # Récupération
 data = read.table("http://lmi.insa-rouen.fr/~portier/Data/p13.txt", header=TRUE)
+attach(data)
 
 # Analyse données
 plot(data)
+cor(data)
+
+# Echantillon d'apprentissage et de test
+set.seed(111)
+test.ratio = .2
+npop = nrow(data)
+nvar = ncol(data)
+ntest = ceiling(npop*test.ratio)
+testi = sample(1:npop, ntest)
+appri = setdiff(1:npop, testi)
+appr = data[appri,]
+test = data[testi,]
+summary(appr)
+summary(test)
+
+appr_ozon = appr$ozon
+appr_temp = appr$temp
+appr_vent = appr$vent
+appr_mozon = appr$mozon
+
+test_ozon = test$ozon
+test_temp = test$temp
+test_vent = test$vent
+test_mozon = test$mozon
+
+# Estimation
+modgam <- gam(appr_ozon ~ s(appr_temp) + s(appr_vent) + s(appr_mozon))
+summary(modgam)
+
+par(mfrow=c(2, 2))x
+plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan")
+plot(modgam,scale=0,select=2,shade=TRUE, shade.col="cyan")
+plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
+
+gam.check(modgam)
+
+# Prediction
+test_data <- data.frame(est_temp, test_vent, test_mozon)
+pred <- predict(modgam, test_data, se.fit = TRUE)
+
+# Performances
+source("Perfo.R")
+source("TabDep.R")
+Perfo(ozon, mozon, ozonprev)
+TabDep(ozon, mozon, ozonprev, 130, 180, 130)
+
+
+region = matrix(data = NA, ncol=2, nrow=2)
+region[1,1] = quantile(vent, 1/3)
+region[1,2] = quantile(vent, 2/3)
+region[2,1] = quantile(mozon, 1/3)
+region[2,2] = quantile(mozon, 2/3)
+
+plot(vent, mozon)
+abline(v=region[1,1])
+abline(v=region[1,2])
+abline(h=region[2,1])
+abline(h=region[2,2])
+
+vent_g = which(vent <= region[1,1])
+vent_m = which(vent > region[1,1] & vent < region[1,2])
+vent_d = which(vent >= region[1,2])
+
+mozon_b = which(mozon <= region[2,1])
+mozon_m = which(mozon > region[2,1] & vent < region[2,2])
+mozon_h = which(mozon >= region[2,2])
+
 
 
