@@ -26,7 +26,7 @@ for(i in 1:length(qualitatives)){
 	if(test > 0.05){
 		#cat(names(qualitatives)[i], " : ", test, "\t indépendant \n")
 	} else {
-		cat(names(qualitatives)[i], " : ", test, "\t non indépendant \n")
+		cat(names(qualitatives)[i], " : ", test, "\t dépendant \n")
 	}
 }
 # Garder :
@@ -41,14 +41,22 @@ hist(FC)
 quantitatives = data.frame( AGE, TAS, FC)
 cor(quantitatives)
 
-# Regression
+# Regression - selection de variables
 starl <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial, trace=TRUE)
 summary(starl)
 anova(starl)
 
+# Comparaison de modèles
+starl <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial, trace=TRUE)
+starl2 <- glm(STA ~ TYP + CS + AGE , family = binomial, trace=TRUE)
+
+stat_de_test = starl$deviance - starl2$deviance
+zone = 15,507
+
+
 # Etude des résidus
-res = residuals.glm(starl,type="pearson")
-residuals.glm(starl, type="deviance")
+resp = residuals.glm(starl,type="pearson")
+resd = residuals.glm(starl, type="deviance")
 
 
 
