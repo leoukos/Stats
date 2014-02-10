@@ -24,11 +24,14 @@ for(i in 1:length(qualitatives)){
 	tab = table(qualitatives[,i], STA)
 	test = chisq.test(tab)$p.value
 	if(test > 0.05){
-		cat(names(qualitatives)[i], " : ", test, "\t indépendant \n")
+		#cat(names(qualitatives)[i], " : ", test, "\t indépendant \n")
 	} else {
 		cat(names(qualitatives)[i], " : ", test, "\t non indépendant \n")
 	}
 }
+# Garder :
+# SER, IRC, INF, MCE, TYP, CRE, CS 
+
 
 par(mfrow=c(1,3))
 hist(AGE)
@@ -38,8 +41,14 @@ hist(FC)
 quantitatives = data.frame( AGE, TAS, FC)
 cor(quantitatives)
 
-# 
+# Regression
+starl <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial, trace=TRUE)
+summary(starl)
+anova(starl)
 
+# Etude des résidus
+res = residuals.glm(starl,type="pearson")
+residuals.glm(starl, type="deviance")
 
 
 
