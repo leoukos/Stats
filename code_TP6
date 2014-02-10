@@ -130,11 +130,12 @@ test_mozon = test$mozon
 modgam <- gam(appr_ozon ~ s(appr_temp) + s(appr_vent) + s(appr_mozon))
 summary(modgam)
 
-par(mfrow=c(2, 2))x
+par(mfrow=c(2, 2))
 plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan")
 plot(modgam,scale=0,select=2,shade=TRUE, shade.col="cyan")
 plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
 
+# Erreur estimation
 gam.check(modgam)
 
 # Prediction
@@ -152,6 +153,8 @@ source("TabDep.R")
 Perfo(test_ozon, test_mozon, pred_ozon)
 TabDep(test_ozon, pred_ozon, 130, 180, 130)
 
+
+######################################
 # Estimateurs partiels
 
 x1 = vent

@@ -104,7 +104,7 @@ lines(seq(-3,3, b=0.2), f1(seq(-3,3, b=0.2)), lwd=2, col="red")
 
 #### Partial estimation
 # 9 regions de proba 1/9
-patial = function(x1, x2, x3, y){
+partial = function(x1, x2, x3, y){
 
 n = length(x1)
 x1r = matrix(data=NA, nrow=n, ncol=9)
