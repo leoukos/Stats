@@ -70,7 +70,9 @@ resp = residuals.glm(starl,type="pearson")
 resd = residuals.glm(starl, type="deviance")
 
 # CS comme une variable qualitative
-CS <- as.factor(CS)
-summary(glm(STA ~ AGE + CAN + IRC + INF + TAS + CS, family = binomial))
+CS_2 <- as.factor(CS)
+summary(glm(STA ~ AGE + CAN + IRC + INF + TAS + CS_2, family = binomial))
 
+
+#
 
