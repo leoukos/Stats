@@ -41,19 +41,24 @@ summary(modgam)
 
 
 par(mfrow=c(2, 2))
-plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan")
+plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan", lwd=2)
+lines(seq(-4, 4, by=0.1),f1(seq(-4, 4, by=0.1)), col="red", lwd=2) 
 plot(modgam,scale=0,select=2,shade=TRUE, shade.col="cyan")
+lines(seq(-4, 4, by=0.1),f2(seq(-4, 4, by=0.1)), col="red", lwd=2)
 plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
+#lines(seq(0, 1, by=0.01),f3(seq(0, 1, by=0.01)), col="red", lwd=2)
 
 
 #plot(modgam,pages=1,residuals=TRUE)
 gam.check(modgam)
+shapiro.test(modgam$res)
+yc <- predict(modgam)
 
 
 # Comparaison avec x2 en linéaire
 modgam2 <- gam(y ~ s(x1) + x2 + s(x3))
-summary(modgam)
-AIC(modgam, modgam2)
+summary(modgam2)
+#AIC(modgam, modgam2)
 
 # Estimation partielle
 # on va estimer f3 
