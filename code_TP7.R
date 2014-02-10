@@ -41,16 +41,27 @@ hist(FC)
 quantitatives = data.frame( AGE, TAS, FC)
 cor(quantitatives)
 
-# Regression - selection de variables
+# Regression (test)
 starl <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial, trace=TRUE)
 summary(starl)
 anova(starl)
 
-# Comparaison de modèles
-starl <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial, trace=TRUE)
-starl2 <- glm(STA ~ TYP + CS + AGE , family = binomial, trace=TRUE)
+# Selection de variables
+summary(glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))
+summary(glm(STA ~ IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))
+summary(glm(STA ~ IRC + INF + MCE + TYP + CRE + CS + AGE + TAS , family = binomial))
+summary(glm(STA ~ IRC + MCE + TYP + CRE + CS + AGE + TAS , family = binomial))
+summary(glm(STA ~ IRC + MCE + TYP + CS + AGE + TAS , family = binomial))
+summary(glm(STA ~ IRC + TYP + CS + AGE + TAS , family = binomial))
+summary(glm(STA ~ TYP + CS + AGE + TAS , family = binomial))
+summary(glm(STA ~ TYP + CS + AGE , family = binomial))
 
-stat_de_test = starl$deviance - starl2$deviance
+
+# Comparaison de modèles
+starl_gros <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial)
+starl_petit <- glm(STA ~ TYP + CS + AGE , family = binomial)
+
+stat_de_test = starl_petit$deviance - starl_gros$deviance
 zone = 15,507
 
 
@@ -60,5 +71,6 @@ resd = residuals.glm(starl, type="deviance")
 
 # CS comme une variable qualitative
 CS <- as.factor(CS)
+summary(glm(STA ~ AGE + CAN + IRC + INF + TAS + CS, family = binomial))
 
 
