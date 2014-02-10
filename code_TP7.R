@@ -58,6 +58,7 @@ zone = 15,507
 resp = residuals.glm(starl,type="pearson")
 resd = residuals.glm(starl, type="deviance")
 
-
+# CS comme une variable qualitative
+CS <- as.factor(CS)
 
 
