@@ -24,9 +24,9 @@ for(i in 1:length(qualitatives)){
 	tab = table(qualitatives[,i], STA)
 	test = chisq.test(tab)$p.value
 	if(test > 0.05){
-		cat(names(qualitatives)[i], " : ", test, "\tsignificatif \n")
+		cat(names(qualitatives)[i], " : ", test, "\t indépendant \n")
 	} else {
-		cat(names(qualitatives)[i], " : ", test, "\tnon significatif \n")
+		cat(names(qualitatives)[i], " : ", test, "\t non indépendant \n")
 	}
 }
 
@@ -34,6 +34,11 @@ par(mfrow=c(1,3))
 hist(AGE)
 hist(TAS)
 hist(FC)
+
+quantitatives = data.frame( AGE, TAS, FC)
+cor(quantitatives)
+
+# 
 
 
 
