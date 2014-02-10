@@ -183,17 +183,39 @@ abline(h=quantile(x2, 2/3), col="red")
 
 plot(modgam,scale=0,select=3,shade=TRUE, lwd=2, col="red" )
 
-plot(modgam_1,scale=0,select=3,shade=TRUE, shade.col="cyan")
-plot(modgam_2,scale=0,select=3,shade=TRUE, shade.col="cyan")
-plot(modgam_3,scale=0,select=3,shade=TRUE, shade.col="cyan")
 
-plot(modgam_4,scale=0,select=3,shade=TRUE, shade.col="cyan")
-plot(modgam_5,scale=0,select=3,shade=TRUE, shade.col="cyan")
-plot(modgam_6,scale=0,select=3,shade=TRUE, shade.col="cyan")
+# Observé-prévu
+plot(predict(modgam_1), yr[1:ir[1]-1,1], main="bg")
+abline(0,1, col="red")
+plot(predict(modgam_2), yr[1:ir[2]-1,2], main="mg")
+abline(0,1, col="red")
+plot(predict(modgam_3), yr[1:ir[3]-1,3], main="hg")
+abline(0,1, col="red")
+plot(predict(modgam_4), yr[1:ir[4]-1,4], main="bm")
+abline(0,1, col="red")
+plot(predict(modgam_5), yr[1:ir[5]-1,5], main="mm")
+abline(0,1, col="red")
+plot(predict(modgam_6), yr[1:ir[6]-1,6], main="mh")
+abline(0,1, col="red")
+plot(predict(modgam_7), yr[1:ir[7]-1,7], main="bd")
+abline(0,1, col="red")
+plot(predict(modgam_8), yr[1:ir[8]-1,8], main="md")
+abline(0,1, col="red")
+plot(predict(modgam_9), yr[1:ir[9]-1,9], main="hd")
+abline(0,1, col="red")
 
-plot(modgam_7,scale=0,select=3,shade=TRUE, shade.col="cyan")
-plot(modgam_8,scale=0,select=3,shade=TRUE, shade.col="cyan")
-plot(modgam_9,scale=0,select=3,shade=TRUE, shade.col="cyan")
+# Estimateur x3
+plot(modgam_1,scale=0,select=3,shade=TRUE, shade.col="cyan", main="bg")
+plot(modgam_2,scale=0,select=3,shade=TRUE, shade.col="cyan", main="mg")
+plot(modgam_3,scale=0,select=3,shade=TRUE, shade.col="cyan", main="hg")
+
+plot(modgam_4,scale=0,select=3,shade=TRUE, shade.col="cyan", main="hm")
+plot(modgam_5,scale=0,select=3,shade=TRUE, shade.col="cyan", main="mm")
+plot(modgam_6,scale=0,select=3,shade=TRUE, shade.col="cyan", main="bm")
+
+plot(modgam_7,scale=0,select=3,shade=TRUE, shade.col="cyan", main="bd")
+plot(modgam_8,scale=0,select=3,shade=TRUE, shade.col="cyan", main="md")
+plot(modgam_9,scale=0,select=3,shade=TRUE, shade.col="cyan", main="hd")
 }
 
 

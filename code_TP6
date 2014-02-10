@@ -52,7 +52,7 @@ plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
 #plot(modgam,pages=1,residuals=TRUE)
 gam.check(modgam)
 shapiro.test(modgam$res)
-yc <- predict(modgam)
+#yc <- predict(modgam)
 
 
 # Comparaison avec x2 en linéaire
@@ -135,8 +135,8 @@ plot(modgam,scale=0,select=1,shade=TRUE, shade.col="cyan")
 plot(modgam,scale=0,select=2,shade=TRUE, shade.col="cyan")
 plot(modgam,scale=0,select=3,shade=TRUE, shade.col="cyan")
 
-# Erreur estimation
 gam.check(modgam)
+shapiro.test(modgam)
 
 # Prediction
 test_data <- data.frame(appr_temp=test_temp, appr_vent=test_vent, appr_mozon=test_mozon)
@@ -153,8 +153,6 @@ source("TabDep.R")
 Perfo(test_ozon, test_mozon, pred_ozon)
 TabDep(test_ozon, pred_ozon, 130, 180, 130)
 
-
-######################################
 # Estimateurs partiels
 
 x1 = vent
