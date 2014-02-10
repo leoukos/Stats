@@ -20,8 +20,12 @@ cor(data)
 
 # Test d'indépendance du Khi deux
 qualitatives = data.frame(ID, SEX, RAC, SER, CAN, IRC, INF, MCE, ATC, TYP, FRA, PO2, PH, PCO, BIC, CRE, CS)
-for(i in length(qualitatives)){
+for(i in 1:length(qualitatives)){
 	tab = table(qualitatives[,i], STA)
-	res = chisq.test(tab)$p-value
-	cat(res, "\n")
+	cat(names(qualitatives)[i], " : ", chisq.test(tab)$p.value, "\n")
 }
+
+par(mfrow=c(1,3))
+hist(AGE)
+hist(TAS)
+hist(FC)
