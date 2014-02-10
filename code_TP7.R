@@ -44,7 +44,7 @@ cor(quantitatives)
 # Regression (test)
 starl <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial, trace=TRUE)
 summary(starl)
-anova(starl)
+anova(starl) # Contribution associées au variables
 
 # Selection de variables
 summary(glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))
@@ -74,5 +74,17 @@ CS_2 <- as.factor(CS)
 summary(glm(STA ~ AGE + CAN + IRC + INF + TAS + CS_2, family = binomial))
 
 
-#
+# Modele medecin
+starl_medecin <- glm(STA ~ AGE + CAN + IRC + INF + TAS + CS, family = binomial)
+starl_stat <- starl_petit <- glm(STA ~ TYP + CS + AGE , family = binomial)
+
+# deviance plus petite ou pas ~ % variance expliquée  // AIC
+
+
+# Numéro du patient dans le modèle
+
+
+
+
+
 
