@@ -62,7 +62,7 @@ starl_gros <- glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC 
 starl_petit <- glm(STA ~ TYP + CS + AGE , family = binomial)
 
 stat_de_test = starl_petit$deviance - starl_gros$deviance
-zone = 15,507 # pris dans la tbable du khi deux
+zone = 15,507 # pris dans la table du khi deux
 
 
 # Etude des résidus
