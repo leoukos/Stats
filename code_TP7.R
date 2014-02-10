@@ -22,10 +22,20 @@ cor(data)
 qualitatives = data.frame(ID, SEX, RAC, SER, CAN, IRC, INF, MCE, ATC, TYP, FRA, PO2, PH, PCO, BIC, CRE, CS)
 for(i in 1:length(qualitatives)){
 	tab = table(qualitatives[,i], STA)
-	cat(names(qualitatives)[i], " : ", chisq.test(tab)$p.value, "\n")
+	test = chisq.test(tab)$p.value
+	if(test > 0.05){
+		cat(names(qualitatives)[i], " : ", test, "\tsignificatif \n")
+	} else {
+		cat(names(qualitatives)[i], " : ", test, "\tnon significatif \n")
+	}
 }
 
 par(mfrow=c(1,3))
 hist(AGE)
 hist(TAS)
 hist(FC)
+
+
+
+
+
