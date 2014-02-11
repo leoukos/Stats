@@ -104,7 +104,7 @@ lines(seq(-3,3, b=0.2), f1(seq(-3,3, b=0.2)), lwd=2, col="red")
 
 #### Partial estimation
 # 9 regions de proba 1/9
-partial = function(x1, x2, x3, y){
+#partial = function(x1, x2, x3, y){
 
 n = length(x1)
 x1r = matrix(data=NA, nrow=n, ncol=9)
@@ -216,15 +216,15 @@ plot(modgam_6,scale=0,select=3,shade=TRUE, shade.col="cyan", main="bm")
 plot(modgam_7,scale=0,select=3,shade=TRUE, shade.col="cyan", main="bd")
 plot(modgam_8,scale=0,select=3,shade=TRUE, shade.col="cyan", main="md")
 plot(modgam_9,scale=0,select=3,shade=TRUE, shade.col="cyan", main="hd")
-}
 
 
 
+par(mfrow=c(2, 2))
 
-
-
-
-
+plot(modgam, select=3, ylim=c(-40,100), main='Estimateurs global')
+plot(modgam_1, select=3, ylim=c(-40,100), main='Estimateurs global - region bas gauche')
+plot(modgam_5, select=3, ylim=c(-40,100), main='Estimateurs global - region milieu')
+plot(modgam_7, select=3, ylim=c(-40,100), main='Estimateurs global - region bas droite')
 
 
 
