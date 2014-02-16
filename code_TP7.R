@@ -33,10 +33,15 @@ for(i in 1:length(qualitatives)){
 # SER, IRC, INF, MCE, TYP, CRE, CS 
 
 
-par(mfrow=c(1,3))
+par(mfrow=c(2,2))
 hist(AGE)
 hist(TAS)
 hist(FC)
+
+par(mfrow=c(2,2))
+plot(AGE, STA)
+plot(TAS, STA)
+plot(FC, STA)
 
 quantitatives = data.frame( AGE, TAS, FC)
 cor(quantitatives)
@@ -47,14 +52,14 @@ summary(starl)
 anova(starl) # Contribution associées au variables
 
 # Selection de variables
-summary(glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))
-summary(glm(STA ~ IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))
-summary(glm(STA ~ IRC + INF + MCE + TYP + CRE + CS + AGE + TAS , family = binomial))
-summary(glm(STA ~ IRC + MCE + TYP + CRE + CS + AGE + TAS , family = binomial))
-summary(glm(STA ~ IRC + MCE + TYP + CS + AGE + TAS , family = binomial))
-summary(glm(STA ~ IRC + TYP + CS + AGE + TAS , family = binomial))
-summary(glm(STA ~ TYP + CS + AGE + TAS , family = binomial))
-summary(glm(STA ~ TYP + CS + AGE , family = binomial))
+summary(glm(STA ~ SER + IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))$deviance
+summary(glm(STA ~ IRC + INF + MCE + TYP + CRE + CS + AGE + TAS + FC , family = binomial))$deviance
+summary(glm(STA ~ IRC + INF + MCE + TYP + CRE + CS + AGE + TAS , family = binomial))$deviance
+summary(glm(STA ~ IRC + MCE + TYP + CRE + CS + AGE + TAS , family = binomial))$deviance
+summary(glm(STA ~ IRC + MCE + TYP + CS + AGE + TAS , family = binomial))$deviance
+summary(glm(STA ~ IRC + TYP + CS + AGE + TAS , family = binomial))$deviance
+summary(glm(STA ~ TYP + CS + AGE + TAS , family = binomial))$deviance
+summary(glm(STA ~ TYP + CS + AGE , family = binomial))$deviance
 
 
 # Comparaison de modèles
@@ -69,20 +74,36 @@ zone = 15,507 # pris dans la table du khi deux
 resp = residuals.glm(starl,type="pearson")
 resd = residuals.glm(starl, type="deviance")
 
+par(mfrow=c(1,2))
+plot(resp, main="Residus de Pearson",xlab="")
+abline(h=quantile(resp, 0.20), col="red")
+abline(h=quantile(resp, 0.80), col="red")
+plot(resd, main="Residus de deviance", xlab="")
+abline(h=quantile(resd, 0.20), col="red")
+abline(h=quantile(resd, 0.80), col="red")
+
 # CS comme une variable qualitative
-CS_2 <- as.factor(CS)
+CS <- as.factor(CS)
 summary(glm(STA ~ AGE + CAN + IRC + INF + TAS + CS_2, family = binomial))
 
 
 # Modele medecin
 starl_medecin <- glm(STA ~ AGE + CAN + IRC + INF + TAS + CS, family = binomial)
-starl_stat <- starl_petit <- glm(STA ~ TYP + CS + AGE , family = binomial)
+
+summary(glm(STA ~ AGE + CAN + IRC + INF + TAS + CS, family = binomial))
+summary(glm(STA ~ AGE + CAN + IRC + TAS + CS, family = binomial))
+summary(glm(STA ~ AGE + IRC + TAS + CS, family = binomial))
+summary(glm(STA ~ AGE + TAS + CS, family = binomial))
+
+
+
+starl_stat <- glm(STA ~ TYP + CS + AGE , family = binomial)
 
 # deviance plus petite ou pas ~ % variance expliquée  // AIC
 
 
 # Numéro du patient dans le modèle
-
+starl_petit <- glm(STA ~ TYP + CS + AGE + ID , family = binomial)
 
 
 
