@@ -102,4 +102,4 @@ Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="
 Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
 
 
-## Var non corrélées selectionnées avec randomforest, gam
+## Var non corrélées selectionnées avec randomforest, comparaison avec gam
