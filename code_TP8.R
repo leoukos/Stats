@@ -52,10 +52,18 @@ title("Modélisation des PM10")
 #de 17,15.
 
 
-# Peformances
-pm10est = predict(modcart, test)
-plot(test$PM10, pm10est)
-Perfopm10(test$PM10,pm10est)
-TabDeppm10(test$PM10,pm10est,30,50,30)
+# Peformances en estimation
+pm10est= predict(modcart)
+plot(appr$PM10, pm10est)
+Perfopm10(appr$PM10,pm10est)
+TabDeppm10(appr$PM10,pm10est,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
-Fig_obspm10(test$PM10,pm10est,Titre,"Essai")
+Fig_obspm10(appr$PM10,pm10est,Titre,"Essai")
+
+# et en prévision
+pm10prev = predict(modcart, test)
+plot(test$PM10, pm10prev)
+Perfopm10(test$PM10,pm10prev)
+TabDeppm10(test$PM10,pm10prev,30,50,30)
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
