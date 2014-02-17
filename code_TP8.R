@@ -15,6 +15,10 @@ summary(Data)
 pm10data = na.omit(Data)
 attach(pm10data)
 
+# plot(pm10data)
+# certaines données semblent être corrélées
+# cor(pm10data)
+
 # Echantillon d'apprentissage et de test
 set.seed(111)
 test.ratio = .25
@@ -53,7 +57,7 @@ title("Modélisation des PM10")
 
 # Peformances en estimation
 pm10est= predict(modcart)
-plot(appr$PM10, pm10est)
+#plot(appr$PM10, pm10est)
 Perfopm10(appr$PM10,pm10est)
 TabDeppm10(appr$PM10,pm10est,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
@@ -82,4 +86,20 @@ for (i in seq_along(impvar)) {
   partialPlot(modrf, pm10data, impvar[i], xlab=impvar[i],main=paste("Effect de", impvar[i]),lwd=1.8,cex.lab=1.6,cex.main=1.6,,cex.axis=1.2)
 }
 par(op)
+
+pm10est= predict(modrf)
+#plot(appr$PM10, pm10est)
+Perfopm10(appr$PM10,pm10est)
+TabDeppm10(appr$PM10,pm10est,30,50,30)
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(appr$PM10,pm10est,Titre,"Essai")
+
+pm10prev = predict(modrf, test)
+plot(test$PM10, pm10prev)
+Perfopm10(test$PM10,pm10prev)
+TabDeppm10(test$PM10,pm10prev,30,50,30)
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
+
+
 
