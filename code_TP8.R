@@ -4,12 +4,13 @@
 library(rpart)
 library(randomForest)
 
-#source("Perfopm10.R")
-#source("Tabdeppm10.R")
-#source("Fig_obspm10.R")
+source("Perfopm10.R")
+source("Tabdeppm10.R")
+source("Fig_obspm10.R")
 
 Data<-read.table("http://lmi.insa-rouen.fr/~portier/Data/Data_HRI.txt",header=TRUE,sep=";")
 summary(Data)
+attach(Data)
 
 # Elimination des donnees
 pm10data = na.omit(Data)
@@ -52,8 +53,9 @@ title("Modélisation des PM10")
 
 
 # Peformances
-pm10est = predict(modcart)
-Perfopm10(appr$PM10,pm10est)
-TabDeppm10(pm10data$PM10[appri],pm10est,30,50,30)
+pm10est = predict(modcart, test)
+plot(test$PM10, pm10est)
+Perfopm10(test$PM10,pm10est)
+TabDeppm10(test$PM10,pm10est,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
-Fig_obspm10(pm10data$PM10[appri],pm10est,Titre,"Essai")
+Fig_obspm10(test$PM10,pm10est,Titre,"Essai")
