@@ -51,7 +51,6 @@ title("Modélisation des PM10")
 #la valeur moyenne de PM10 de ce nouvel échantillon (de cette feuille) est
 #de 17,15.
 
-
 # Peformances en estimation
 pm10est= predict(modcart)
 plot(appr$PM10, pm10est)
@@ -67,6 +66,13 @@ Perfopm10(test$PM10,pm10prev)
 TabDeppm10(test$PM10,pm10prev,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
 Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
+
+# Elagage
+printcp(modcart)
+plotcp(modcart)
+modcartpr <- prune(modcart, cp = 0.023)
+plot(modcartpr, branch = 0.3, uniform = T)
+text(modcartpr, digit = 5)
 
 # Forêts aléatoires
 modrf <- randomForest(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + GTrouen + DV.dom, importance=TRUE)
