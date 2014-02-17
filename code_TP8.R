@@ -18,13 +18,13 @@ pm10data = na.omit(Data)
 # Echantillon d'apprentissage et de test
 set.seed(111)
 test.ratio = .25
-npop = nrow(Data)
-nvar = ncol(Data)
+npop = nrow(pm10data)
+nvar = ncol(pm10data)
 ntest = ceiling(npop*test.ratio)
 testi = sample(1:npop, ntest)
 appri = setdiff(1:npop, testi)
-appr = Data[appri,]
-test = Data[testi,]
+appr = pm10data[appri,]
+test = pm10data[testi,]
 
 # Construction de l’arbre maximal
 modcart <- rpart(formula(pm10data),data = pm10data[appri,])
@@ -67,3 +67,15 @@ Perfopm10(test$PM10,pm10prev)
 TabDeppm10(test$PM10,pm10prev,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
 Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
+
+# Forêts aléatoires
+modcart <- randomForest(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + GTrouen + DV.dom, importance=TRUE)
+impvar = c("NO","NO2","SO2","PL.som","T.moy","DV.dom","VV.moy","PA.moy","GTrouen")
+op <- par(mfrow=c(3, 3))
+for (i in seq_along(impvar)) {
+partialPlot(modrf, Data, impvar[i], xlab=impvar[i],
+main=paste("Effect de", impvar[i]),lwd=1.8,
+cex.lab=1.6,cex.main=1.6,,cex.axis=1.2)
+}
+par(op)
+
