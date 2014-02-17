@@ -87,7 +87,7 @@ for (i in seq_along(impvar)) {
 }
 par(op)
 
-pm10est= predict(modrf)
+pm10est = predict(modrf, appr)
 #plot(appr$PM10, pm10est)
 Perfopm10(appr$PM10,pm10est)
 TabDeppm10(appr$PM10,pm10est,30,50,30)
