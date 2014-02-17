@@ -1,15 +1,18 @@
-# 
+# TP sur les arbres de régression
+
+#  imports
 library(rpart)
 library(randomForest)
+
 #source("Perfopm10.R")
 #source("Tabdeppm10.R")
 #source("Fig_obspm10.R")
+
 Data<-read.table("http://lmi.insa-rouen.fr/~portier/Data/Data_HRI.txt",header=TRUE,sep=";")
 summary(Data)
 
 # Elimination des donnees
 pm10data = na.omit(Data)
-
 
 # Echantillon d'apprentissage et de test
 set.seed(111)
@@ -22,7 +25,6 @@ appri = setdiff(1:npop, testi)
 appr = Data[appri,]
 test = Data[testi,]
 
-
 # Construction de l’arbre maximal
 modcart <- rpart(formula(pm10data),data = pm10data[appri,])
 summary(modcart)
@@ -31,4 +33,9 @@ plot(modcart, branch = 0.3, uniform = T)
 text(modcart, digit = 4,col=2)
 title("Modélisation des PM10")
 
-#
+# Peformances
+pm10est = predict(modcart)
+Perfopm10(Data[appri,]$PM10,pm10est)
+TabDeppm10(pm10data$PM10[appri],pm10est,30,50,30)
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(pm10data$PM10[appri],pm10est,Titre,"Essai")
