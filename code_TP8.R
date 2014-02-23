@@ -8,7 +8,7 @@ source("Perfopm10.R")
 source("Tabdeppm10.R")
 source("Fig_obspm10.R")
 
-Data<-read.table("http://lmi.insa-rouen.fr/~portier/Data/Data_HRI.txt",header=TRUE,sep=";")
+Data<-read.table("http://lmi.insa-rouen.fr/~portier/Data/Data_HRI.txt", header=TRUE,sep=";")
 summary(Data)
 
 # Elimination des donnees
@@ -18,6 +18,7 @@ attach(pm10data)
 # plot(pm10data)
 # certaines données semblent être corrélées
 # cor(pm10data)
+# Certaines variables très corrélées
 
 # Echantillon d'apprentissage et de test
 set.seed(111)
@@ -79,6 +80,8 @@ plot(modcartpr, branch = 0.3, uniform = T)
 text(modcartpr, digit = 5)
 
 # Forêts aléatoires
+# !!!!!!!!!!!!!!! QUELLES VARIABLES PRENDRE !!!!!!!!!!!!!!!!!!!!!!
+# pas trop corrélées
 modrf <- randomForest(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + GTrouen + DV.dom, importance=TRUE)
 impvar = c("NO","NO2","SO2","PL.som","T.moy","DV.dom","VV.moy","PA.moy","GTrouen")
 op <- par(mfrow=c(3, 3))
@@ -103,3 +106,51 @@ Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
 
 
 ## Var non corrélées selectionnées avec randomforest, comparaison avec gam
+
+
+# Importance des variables (non corrélées)
+round(importance(modrf), 2)
+Titre ="Station JUS - Importance des variables par les Forets Aleatoires"
+varImpPlot(modrf, sort=TRUE, type=1, main=Titre)
+
+
+#### LM
+# On garde les variables suivantes :
+modlm <- lm(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + GTrouen + DV.dom)
+summary(modlm)
+
+summary(lm(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + GTrouen + DV.dom))
+summary(lm(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + DV.dom))
+summary(lm(PM10 ~ NO + NO2 + SO2 + T.moy + PL.som + PA.moy + DV.dom))
+summary(lm(PM10 ~ NO + SO2 + T.moy + PL.som + PA.moy + DV.dom))
+summary(lm(PM10 ~ NO + SO2 + T.moy + PL.som + DV.dom))
+
+# erreurs
+plot(modlm$res)
+abline(0,0, col="red")
+
+# observé/prévu ??
+lmpred=predict(modlm, test)
+# plot(test$PM10, lmpred)
+# abline(0,1, col='red')
+Perfopm10(test$PM10,lmpred)
+# TABDEP ??
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(test$PM10,lmpred,Titre,"Essai") # ?????
+
+#### GAM
+modgam <- gam(PM10 ~ s(NO) + s(SO2) + s(T.moy) + s(PL.som) + s(DV.dom))
+summary(modgam)
+
+gampred=predict(modgam, test)
+# plot(test$PM10, gampred)
+# abline(0,1, col='red')
+Perfopm10(test$PM10,gampred)
+# TABDEP ??
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(test$PM10,gampred,Titre,"Essai") # ?????
+
+
+
+
+
