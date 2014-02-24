@@ -3,6 +3,7 @@
 #  imports
 library(rpart)
 library(randomForest)
+library(mgcv)
 
 source("Perfopm10.R")
 source("Tabdeppm10.R")
@@ -15,10 +16,22 @@ summary(Data)
 pm10data = na.omit(Data)
 attach(pm10data)
 
-# plot(pm10data)
+plot(pm10data)
+
+# corrélations
+cor(matrix(nrow=length(T.min), ncol=3, data=c(T.min, T.max, T.moy)))
+cor(matrix(nrow=length(T.min), ncol=2, data=c(VV.moy, VV.max)))
+cor(matrix(nrow=length(T.min), ncol=3, data=c(HR.min, HR.moy, HR.max)))
+cor(matrix(nrow=length(T.min), ncol=2, data=c(GTrouen, GTlehavre)))
+
+cor(pm10data)[,1]
+
 # certaines données semblent être corrélées
 # cor(pm10data)
 # Certaines variables très corrélées
+
+
+
 
 # Echantillon d'apprentissage et de test
 set.seed(111)
@@ -72,16 +85,32 @@ TabDeppm10(test$PM10,pm10prev,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
 Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
 
-# Elagage
+##### Elagage
 printcp(modcart)
 plotcp(modcart)
 modcartpr <- prune(modcart, cp = 0.023)
 plot(modcartpr, branch = 0.3, uniform = T)
-text(modcartpr, digit = 5)
+text(modcartpr, digit = 5, col=2)
+title("Modélisation des PM10")
+
+# Peformances en estimation
+pm10est= predict(modcartpr)
+#plot(appr$PM10, pm10est)
+Perfopm10(appr$PM10,pm10est)
+TabDeppm10(appr$PM10,pm10est,30,50,30)
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(appr$PM10,pm10est,Titre,"Essai")
+
+# et en prévision
+pm10prev = predict(modcartpr, test)
+plot(test$PM10, pm10prev)
+Perfopm10(test$PM10,pm10prev)
+TabDeppm10(test$PM10,pm10prev,30,50,30)
+Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
+Fig_obspm10(test$PM10,pm10prev,Titre,"Essai")
+
 
 # Forêts aléatoires
-# !!!!!!!!!!!!!!! QUELLES VARIABLES PRENDRE !!!!!!!!!!!!!!!!!!!!!!
-# pas trop corrélées
 modrf <- randomForest(PM10 ~ NO + NO2 + SO2 + T.moy + VV.moy + PL.som + PA.moy + GTrouen + DV.dom, importance=TRUE)
 impvar = c("NO","NO2","SO2","PL.som","T.moy","DV.dom","VV.moy","PA.moy","GTrouen")
 op <- par(mfrow=c(3, 3))
@@ -98,7 +127,7 @@ Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="
 Fig_obspm10(appr$PM10,pm10est,Titre,"Essai")
 
 pm10prev = predict(modrf, test)
-plot(test$PM10, pm10prev)
+#plot(test$PM10, pm10prev)
 Perfopm10(test$PM10,pm10prev)
 TabDeppm10(test$PM10,pm10prev,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
@@ -125,6 +154,10 @@ summary(lm(PM10 ~ NO + NO2 + SO2 + T.moy + PL.som + PA.moy + DV.dom))
 summary(lm(PM10 ~ NO + SO2 + T.moy + PL.som + PA.moy + DV.dom))
 summary(lm(PM10 ~ NO + SO2 + T.moy + PL.som + DV.dom))
 
+modlm <- lm(PM10 ~ NO + SO2 + T.moy + PL.som + DV.dom)
+summary(modlm)
+
+
 # erreurs
 plot(modlm$res)
 abline(0,0, col="red")
@@ -134,10 +167,9 @@ lmpred=predict(modlm, test)
 # plot(test$PM10, lmpred)
 # abline(0,1, col='red')
 Perfopm10(test$PM10,lmpred)
-# TABDEP ??
+TabDeppm10(test$PM10,lmpred,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
-Fig_obspm10(test$PM10,lmpred,Titre,"Essai") # ?????
-
+Fig_obspm10(test$PM10,lmpred,Titre,"Essai") 
 #### GAM
 modgam <- gam(PM10 ~ s(NO) + s(SO2) + s(T.moy) + s(PL.som) + s(DV.dom))
 summary(modgam)
@@ -146,10 +178,9 @@ gampred=predict(modgam, test)
 # plot(test$PM10, gampred)
 # abline(0,1, col='red')
 Perfopm10(test$PM10,gampred)
-# TABDEP ??
+TabDeppm10(test$PM10,gampred,30,50,30)
 Titre = paste("Station HRI - Arbre maximal","Echantillon d'apprentissage", sep="\n")
-Fig_obspm10(test$PM10,gampred,Titre,"Essai") # ?????
-
+Fig_obspm10(test$PM10,gampred,Titre,"Essai")
 
 
 
